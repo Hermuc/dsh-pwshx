@@ -1,0 +1,36 @@
+# NOTICE — third-party code attribution
+
+This package is MIT-licensed (see LICENSE). It contains code derived from the
+following MIT-licensed projects. Their copyright notices are reproduced here as
+required by the MIT license.
+
+## 1. powershell-fix
+
+- Source: https://github.com/GuTianshuo/powershell-fix
+- License: MIT — Copyright (c) 2026 GuTianshuo
+- Used in: `lib/core/rules.js` (verbatim rule table), `lib/core/gate.js`
+  (verbatim), `lib/core/fixer.js` (orchestration adapted: engine probing removed,
+  `level` option added)
+
+## 2. @chaggle/dsh-powershell-check
+
+- Source: https://github.com/chaggle/dsh-powershell-check
+- License: MIT — Copyright (c) 2026 chaggle
+- Used in: `lib/core/pscheck.js` (copied verbatim from `lib/checker.js`)
+- Note: its pitfall rule set is distilled from the blog post
+  《PowerShell 实战踩坑大全》 (https://chaggle.github.io/blog/2026/08/14/powershell-pitfalls/)
+
+## 3. dsh-tool-pwsh-safe
+
+- Source: https://github.com/sryimnoob123/dsh-tool-pwsh-safe
+- License: MIT — Copyright (c) 2026 dsh-desktop contributors
+- Used in: plugin structure, tool schema shape, and the base64 invocation
+  template in `lib/core/encode.js` (adapted)
+
+## Upstream bug worked around
+
+Both `dsh-tool-pwsh-safe@0.1.1` and `powershell-fix@0.1.0` call
+`ctx.shell.run(ctx.shell.resolve(...))`. The DSH 0.2.x shell seam exposes only
+`resolve()` + `execute()` + `handle.result()`; `run()` does not exist, so both
+upstream plugins fail at runtime with `ctx.shell.run is not a function`.
+This package uses the correct seam.

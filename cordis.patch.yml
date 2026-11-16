@@ -1,0 +1,10 @@
+# dsh-tool-pwsh-safe-plus — bundle patch
+# Registers the single-path pwsh tool (auto-fix + base64 execution) on ctx.tools.
+
+- insert:
+    - id: tool-pwsh-safe-plus
+      name: 'dsh-tool-pwsh-safe-plus'
+      config:
+        fixLevel: safe
+        checkMode: block
+        shell: pwsh

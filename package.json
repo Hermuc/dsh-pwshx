@@ -1,0 +1,42 @@
+{
+  "name": "dsh-tool-pwsh-safe-plus",
+  "version": "0.2.0",
+  "description": "Single PowerShell execution path for DeepSeek Harness: auto-fixes Bash-isms before execution, then runs the script base64-encoded through the official ctx.shell seam (escaping-proof, dsh-win-pwsh7 compatible).",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "engines": {
+    "dsh": ">=0.2.1-rc.3 <0.3.0-0",
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "powershell",
+    "pwsh",
+    "tool",
+    "auto-fix"
+  ],
+  "license": "MIT"
+}
