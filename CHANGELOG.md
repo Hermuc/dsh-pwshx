@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.12] - 2026-11-16
+
+### Refactor（模块化）
+- 抽出 `lib/core/text.js`：`mapLines` / `splitCommandHead` / `splitRedirect` / `splitTopLevelChain` 四个纯文本工具（零依赖、可移植），`rules.js` 减少 83 行。
+- 新增 `test/text.test.js`：10 个直接单测（管道/分号/&&/单个&/引号/2>&1/重定向/引号重定向/换行/链式）。
+- `splitTopLevelChain` 补齐反引号转义（与 `splitCommandHead` 一致）。
+
+### Tests
+- 127 个 `node --test` 用例（+10）
+
 ## [0.2.11] - 2026-11-16
 
 ### Fixed（核实 0.2.10 时发现的引号边界）
