@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.2.2] - 2026-11-16
+
+### Fixed（第 1 轮 bug 测试发现）
+- **here-string 被 fix 规则改写**：`$t = @" ... "@` 块内的内容（含行尾反斜杠、`ls`/`export` 等词）会被 `LC_BACKSLASH_TO_BACKTICK`/`LS_FLAGS` 等规则误改，导致终止符 `"@` 无法收尾、脚本语法错误。
+  - 新增 `lib/core/herestring.js`：应用规则前把整个 here-string 块替换为占位符，规则跑完再原样恢复；WARN 规则也扫描占位符版本文本，避免 `QUOTE_BALANCE` 误报。
+  - 支持双引号 `@"..."@` 与单引号 `@'...'@`，未闭合块原样交给 PowerShell 报错。
+  - 修正起始识别：`$var = @"`（@ 前有赋值）也识别；`Write-Output '@'`、`email@domain.com` 不误判。
+
+### Tests（第 1 轮）
+- 74 个 `node --test` 用例（+6 here-string 专项）
+- 真实执行验证：双引号 here-string、单引号 here-string、外部修复+内部保留、误判回归 4 例全过
+- 边界矩阵：13 组规则误伤/边界输入（12 通过，1 失败→已修）；并发 5 路；59KB 长输出 spill；特殊字符矩阵
+
 ## [0.2.1] - 2026-11-16
 
 ### Added

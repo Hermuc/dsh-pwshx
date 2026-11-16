@@ -1,6 +1,6 @@
 {
   "name": "dsh-tool-pwsh-safe-plus",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Single PowerShell execution path for DeepSeek Harness: auto-fixes Bash-isms before execution, then runs the script base64-encoded through the official ctx.shell seam (escaping-proof, dsh-win-pwsh7 compatible).",
   "type": "module",
   "main": "lib/index.js",
