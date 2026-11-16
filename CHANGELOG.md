@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.6] - 2026-11-16
+
+### Fixed（真实清理任务中发现的 R4 误报）
+- **R4 把 `$_.Property` / `$PSItem.Property` 当成路径陷阱**：任何在双引号里写 `"--- $($_.Name) ---"` 的脚本都会被 R4 阻断。新增 `AUTO_VARIABLES` 集合（`_` / `PSItem` / `args` / `input` / `this` / `error` / `host` / `PID` 等），自动变量后跟属性访问一律放行。
+- **R4 把普通变量的属性访问与路径拼接当成陷阱**：`"$files.Count"`、`"$n\pnpm.log"` 被误阻断。现在只有「全大写环境变量风格」（`$WINDOWS`、`$SYSTEMROOT` 等，且至少 2 字符）后跟 `.` 或 `\` 时才判定为路径陷阱。
+- 保留原生用例：`Get-Content "$WINDOWS.~BT.file"`、`"C:\$WINDOWS.~BT\Sources\..."` 仍正确阻断。
+
+### Tests
+- 101 个 `node --test` 用例（+5 R4 回归：`$_.Name`、`$PSItem.Name`、`$files.Count`、`$obj.Name`、`$n\pnpm.log`、原生 `$WINDOWS.~BT`）
+
 ## [0.2.5] - 2026-11-16
 
 ### Docs

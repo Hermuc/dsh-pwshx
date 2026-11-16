@@ -1,6 +1,6 @@
 {
   "name": "dsh-tool-pwsh-safe-plus",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "DeepSeek Harness 的单一 PowerShell 执行路径：执行前自动修复 Bash 惯性语法，再以 base64 编码通过官方 ctx.shell 通道执行（转义免疫，兼容 dsh-win-pwsh7）。",
   "type": "module",
   "main": "lib/index.js",

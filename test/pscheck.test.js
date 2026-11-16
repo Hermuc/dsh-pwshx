@@ -36,3 +36,40 @@ test("formatHits includes id, title and fix", () => {
   assert.match(text, /R10/);
   assert.match(text, /npm\.cmd/);
 });
+test("R4 does not flag $_.Property inside double quotes", () => {
+  const r = check('Write-Output "--- $($_.Name) ---"');
+  assert.equal(r.blocking.some((x) => x.id === "R4"), false);
+});
+
+test("R4 does not flag $PSItem.Property", () => {
+  const r = check('Get-ChildItem | ForEach-Object { "$($PSItem.Name)" }');
+  assert.equal(r.blocking.some((x) => x.id === "R4"), false);
+});
+
+test("R4 still flags the real path trap", () => {
+  const r = check('Get-Content "C:\\$WINDOWS.~BT\\Sources\\Panther\\setupact.log"');
+  assert.ok(r.blocking.some((x) => x.id === "R4"));
+});
+test("R4 does not flag ordinary variable property access", () => {
+  const r = check('Write-Output "$files.Count items"');
+  assert.equal(r.blocking.some((x) => x.id === "R4"), false);
+});
+
+test("R4 does not flag $obj.Name", () => {
+  const r = check('Write-Output "$obj.Name"');
+  assert.equal(r.blocking.some((x) => x.id === "R4"), false);
+});
+
+test("R4 still flags $WINDOWS.~BT (real trap)", () => {
+  const r = check('Get-Content "$WINDOWS.~BT.file"');
+  assert.ok(r.blocking.some((x) => x.id === "R4"));
+});
+test("R4 does not flag a lowercase variable used in a path join", () => {
+  const r = check('Join-Path $logs "$n\\pnpm.log"');
+  assert.equal(r.blocking.some((x) => x.id === "R4"), false);
+});
+
+test("R4 does not flag lowercase attribute access", () => {
+  const r = check('Write-Output "$obj.Name"');
+  assert.equal(r.blocking.some((x) => x.id === "R4"), false);
+});
