@@ -146,3 +146,33 @@ test("LS_FLAGS ignores pipes inside quotes", () => {
   const r = fix("ls -la 'a|b'", { ...ENV });
   assert.equal(r.fixed, "Get-ChildItem 'a|b' -Force");
 });
+test("GREP keeps pipeline intact", () => {
+  const r = run('grep -n "test" README.md | Select-Object -First 2');
+  assert.equal(r.fixed, 'Select-String -Pattern "test" -Path README.md | Select-Object -First 2');
+  assert.ok(r.fixes.some((f) => f.rule === "GREP"));
+});
+
+test("HEAD_TAIL keeps pipeline intact", () => {
+  const r = run("head -n 3 README.md | Select-Object -First 1");
+  assert.equal(r.fixed, "Get-Content README.md -TotalCount 3 | Select-Object -First 1");
+});
+
+test("TAIL keeps pipeline intact", () => {
+  const r = run("tail -n 5 README.md | Where-Object { $_ }");
+  assert.equal(r.fixed, "Get-Content README.md -Tail 5 | Where-Object { $_ }");
+});
+
+test("RM_FLAGS keeps pipeline intact", () => {
+  const r = run("rm -rf build | Out-Null");
+  assert.equal(r.fixed, "Remove-Item build -Recurse -Force | Out-Null");
+});
+
+test("MKDIR_P keeps pipeline intact", () => {
+  const r = run("mkdir -p a b | Out-Null");
+  assert.ok(r.fixed.endsWith(" | Out-Null"));
+});
+
+test("TOUCH keeps pipeline intact", () => {
+  const r = run("touch x.txt | Out-Null");
+  assert.ok(r.fixed.endsWith(" | Out-Null"));
+});

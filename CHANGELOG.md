@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.9] - 2026-11-16
+
+### Fixed（真实测试发现的管道破坏，覆盖 5 条规则）
+- **`GREP` 带管道完全不触发**：`grep -n "test" file | Select-Object` 因为管道后的 `-First` 被当成复杂旗标，整条规则放弃改写，最终 `grep` 命令不存在报错。现在先 `splitCommandHead` 拆分，只解析 grep 段。
+- **`HEAD_TAIL` 把 `-TotalCount` 追加到整行末尾**：`head -n 3 file | Select-Object` 变成 `Get-Content file | Select-Object -First 1 -TotalCount 3`，报「找不到参数 TotalCount」。
+- **`RM_FLAGS` / `MKDIR_P` / `TOUCH` 同类问题**：`rm -rf build | Out-Null`、`mkdir -p a b | Out-Null`、`touch x | Out-Null` 都会把 flag 追加到管道之后。
+- **`splitCommandHead` 管道符前补空格**：修复 `README.md| Select-Object` 粘连。
+
+### Tests
+- 110 个 `node --test` 用例（+6 管道回归：GREP / HEAD_TAIL / TAIL / RM_FLAGS / MKDIR_P / TOUCH）
+
 ## [0.2.8] - 2026-11-16
 
 ### Refactor（模块化，行为零变化）
