@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.7] - 2026-11-16
+
+### Fixed（真实清理任务中发现的管道破坏）
+- **`LS_FLAGS` 把 `-Force` 追加到整行末尾，破坏管道**：`ls -la 'D:\Repos' | Select-Object -First 3` 被改成 `Get-ChildItem 'D:\Repos' -Force | Select-Object -First 3` 之前，实际生成的是 `... | Select-Object -First 3 -Force`，PowerShell 报 `ForEach-Object: 无法绑定参数 'RemainingScripts'`。
+  - 新增 `splitCommandHead()`：只处理管道/分号之前的那一段，`tail`（`| ...` / `; ...`）原样保留。
+  - 引号内的 `|`/`;`/`&` 不算分隔符。
+  - 管道符前补空格，分号不加。
+
+### Tests
+- 104 个 `node --test` 用例（+3：管道保留、分号保留、引号内管道不切分）
+
 ## [0.2.6] - 2026-11-16
 
 ### Fixed（真实清理任务中发现的 R4 误报）

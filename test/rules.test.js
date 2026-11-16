@@ -131,3 +131,18 @@ test("STRIP_PROMPT: PS path prompt still stripped", () => {
   const r = fix("PS C:\\Users\\An1> Get-ChildItem", { platform: "win32", shell: "pwsh", level: "safe" });
   assert.equal(r.fixed, "Get-ChildItem");
 });
+test("LS_FLAGS keeps pipeline intact (no -Force at the end of the whole line)", () => {
+  const r = fix("ls -la 'D:\\Repos' | Select-Object -First 3", { ...ENV });
+  assert.equal(r.fixed, "Get-ChildItem 'D:\\Repos' -Force | Select-Object -First 3");
+  assert.ok(r.fixes.some((f) => f.rule === "LS_FLAGS"));
+});
+
+test("LS_FLAGS keeps semicolon tail", () => {
+  const r = fix("ls -la; Write-Output done", { ...ENV });
+  assert.equal(r.fixed, "Get-ChildItem -Force; Write-Output done");
+});
+
+test("LS_FLAGS ignores pipes inside quotes", () => {
+  const r = fix("ls -la 'a|b'", { ...ENV });
+  assert.equal(r.fixed, "Get-ChildItem 'a|b' -Force");
+});
