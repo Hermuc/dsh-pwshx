@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.4] - 2026-11-16
+
+### Fixed（第 3 轮 bug 测试发现）
+- **workdir 不存在时报错误导**：executor 拿不存在的目录当 cwd 去 spawn，Windows 报 `spawn C:\Program Files\PowerShell\7\pwsh.exe ENOENT`，看起来像 pwsh 没装。
+  - 新增 `assertWorkdir()`：执行前校验目录存在，报 `pwsh_safe workdir does not exist: <path>`。
+  - 存在的带空格路径（`C:/Program Files`）不受影响。
+
+### Tests（第 3 轮）
+- 93 个 `node --test` 用例（+3 workdir 校验）
+- 真实集成矩阵：`pwsh7_status` / 宿主 `pwsh` / `pwsh_safe` 三方版本一致 7.6.8；宿主与 `pwsh_safe` 并发混跑 5 路无串扰；`chcp` 返回 65001（UTF-8 bridge 生效）
+- workdir 边界：不存在（明确拒绝）/ `..` / 盘根 `D:/` / 带空格存在路径 / 缺失目录
+- 长时运行：20s 任务正常完成（20.5s）
+- 大 stderr：64KB、`truncated:true`、spillPath 正确
+
 ## [0.2.3] - 2026-11-16
 
 ### Fixed（第 2 轮 bug 测试发现）

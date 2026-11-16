@@ -109,14 +109,14 @@ test("fixLevel=off skips rewriting", async () => {
 
 test("relative workdir resolves against the session cwd", async () => {
   const h = makeHarness({});
-  await h.getTool().execute({ script: "Get-Location", description: "cwd probe", workdir: "sub/dir" }, EXEC);
-  assert.equal(h.calls.lastSpec.workdir, "D:\\PortableApps\\sub\\dir");
+  await h.getTool().execute({ script: "Get-Location", description: "cwd probe", workdir: "_Temp" }, EXEC);
+  assert.equal(h.calls.lastSpec.workdir, "D:\\PortableApps\\_Temp");
 });
 
 test("absolute workdir is preserved", async () => {
   const h = makeHarness({});
-  await h.getTool().execute({ script: "Get-Location", description: "cwd probe", workdir: "D:/Temp" }, EXEC);
-  assert.equal(h.calls.lastSpec.workdir, "D:/Temp");
+  await h.getTool().execute({ script: "Get-Location", description: "cwd probe", workdir: "D:/Repos" }, EXEC);
+  assert.equal(h.calls.lastSpec.workdir, "D:/Repos");
 });
 
 test("empty script throws", async () => {
@@ -169,9 +169,9 @@ test("workingDirectory.ensure wins over session.header.cwd", async () => {
 test("falls back to session.header.cwd when workingDirectory is missing", async () => {
   const h = makeHarness({});
   h.ctx.get = () => undefined;
-  const exec = { agent: { session: { header: { cwd: "C:\\fallback" } } } };
+  const exec = { agent: { session: { header: { cwd: "D:\\Repos" } } } };
   await h.getTool().execute({ script: "Get-Location", description: "cwd probe" }, exec);
-  assert.equal(h.calls.lastSpec.workdir, "C:\\fallback");
+  assert.equal(h.calls.lastSpec.workdir, "D:\\Repos");
 });
 test("registers the systemPrompt section through optional injection", () => {
   let section = null;

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { normalizeResult, normalizeStream, resolveSandboxPolicy } from "../lib/dsh/shell.js";
+import { assertWorkdir, normalizeResult, normalizeStream, resolveSandboxPolicy } from "../lib/dsh/shell.js";
 
 test("normalizeStream handles null / undefined / missing fields", () => {
   for (const input of [null, undefined, {}, { text: null }, { truncated: "yes" }]) {
@@ -56,4 +56,15 @@ test("resolveSandboxPolicy passes an empty scope without a session", () => {
 test("resolveSandboxPolicy swallows a throwing service", () => {
   const ctx = { get: () => ({ resolve: () => { throw new Error("boom"); } }) };
   assert.throws(() => resolveSandboxPolicy(ctx, {}), /boom/);
+});
+test("assertWorkdir throws for a missing directory", () => {
+  assert.throws(() => assertWorkdir("D:/NoSuchDirXyz_12345"), /workdir does not exist/);
+});
+
+test("assertWorkdir accepts an existing directory", () => {
+  assert.doesNotThrow(() => assertWorkdir(process.cwd()));
+});
+
+test("assertWorkdir ignores undefined", () => {
+  assert.doesNotThrow(() => assertWorkdir(undefined));
 });
