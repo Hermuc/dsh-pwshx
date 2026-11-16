@@ -9,6 +9,13 @@ function makeHarness(config) {
   const calls = { resolve: [], execute: 0, lastSpec: null };
   const ctx = {
     tools: { register: (t) => { tool = t; } },
+    get: (name) => {
+      if (name === "workingDirectory") {
+        return { ensure: async () => "D:\\PortableApps" };
+      }
+      if (name === "sandboxPolicy") return undefined;
+      return undefined;
+    },
     shell: {
       resolve: (req) => {
         calls.resolve.push(req);
@@ -151,4 +158,40 @@ test("Remove-Item root is refused by the gate, not rewritten by fix", async () =
   assert.equal(res.refused, true);
   assert.match(res.refusalReason, /dangerous command/);
   assert.deepEqual(res.fixes, []);
+});
+test("workingDirectory.ensure wins over session.header.cwd", async () => {
+  const h = makeHarness({});
+  const exec = { agent: { session: { header: { cwd: "C:\\elsewhere" } } } };
+  await h.getTool().execute({ script: "Get-Location", description: "cwd probe" }, exec);
+  assert.equal(h.calls.lastSpec.workdir, "D:\\PortableApps");
+});
+
+test("falls back to session.header.cwd when workingDirectory is missing", async () => {
+  const h = makeHarness({});
+  h.ctx.get = () => undefined;
+  const exec = { agent: { session: { header: { cwd: "C:\\fallback" } } } };
+  await h.getTool().execute({ script: "Get-Location", description: "cwd probe" }, exec);
+  assert.equal(h.calls.lastSpec.workdir, "C:\\fallback");
+});
+test("registers the systemPrompt section through optional injection", () => {
+  let section = null;
+  const ctx = {
+    tools: { register: () => {} },
+    shell: { resolve: (r) => r, execute: async () => ({ result: async () => ({}) }) },
+    shellEnv: { collect: () => ({}) },
+    inject: (names, fn) => {
+      assert.deepEqual(names, ["systemPrompt"]);
+      fn({
+        systemPrompt: {
+          section: (s) => { section = s; },
+          getSectionOrder: () => 42,
+        },
+      });
+    },
+  };
+  apply(ctx, {});
+  assert.ok(section, "section was not registered");
+  assert.equal(section.name, "tool:pwsh-safe-plus");
+  assert.equal(section.order, 42);
+  assert.match(section.text, /pwsh_safe/);
 });

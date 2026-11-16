@@ -131,3 +131,16 @@ node --test          # 50 个用例，含 77 组上游自检
 ## License
 
 MIT。见 [LICENSE](./LICENSE) 与 [NOTICE](./NOTICE)。
+## 与 dsh-win-pwsh7 的协作（实测）
+
+两者是互补关系，不是竞争关系：
+
+| 维度 | 行为 | 证据 |
+|---|---|---|
+| 执行通道 | 都走 `ctx.shell`（同一个 pwsh executor） | `pwsh` 与 `pwsh_safe` 报告的版本都是 7.6.8 |
+| UTF-8 代码页 | pwsh7 的 bridge 会给 `pwsh_safe` 的 base64 命令前缀 `chcp.com 65001 > $null;` | `pwsh_safe("chcp")` → `Active code page: 65001` |
+| 中文输出 | 前缀不影响 base64 调用串，中文逐字正确 | 实测 `中文：你好，世界` |
+| 工具名 | `pwsh`（宿主）/ `pwsh_safe`（本插件）/ `pwsh7_status` / `pwsh7_install`，无重叠 | 全部可同时调用 |
+| 提示段名 | `tool:pwsh` / `tool:pwsh-runtime` / `tool:pwsh-safe-plus`，无重叠 | 注册时互不覆盖 |
+
+> 注意：pwsh7 的 bridge 是**直接改写 `ctx.shell.execute` 的 spec.command**。本插件不检查 `spec.command` 的最终形态，因此前缀不会造成误判；如果将来要做「命令回显」，必须意识到它已经带了 `chcp` 前缀。

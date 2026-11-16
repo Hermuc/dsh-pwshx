@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.1] - 2026-11-16
+
+### Added
+- **systemPrompt 段** `tool:pwsh-safe-plus`：告诉模型何时该用 `pwsh_safe`（多行 / 嵌套引号 / 中文 / Bash 惯性），以及 `[auto-fix]` 标记的含义。段名与官方 `tool:pwsh`、dsh-win-pwsh7 的 `tool:pwsh-runtime` 均不冲突。
+- **会话工作目录**：优先 `ctx.workingDirectory.ensure(agent, signal)`（与官方 pwsh 同口径），服务缺失时退回 `session.header.cwd`。
+
+### Verified（与 dsh-win-pwsh7 协作）
+- `pwsh7_status` / 宿主 `pwsh` / `pwsh_safe` 三者报告同一引擎 7.6.8
+- dsh-win-pwsh7 的 UTF-8 console bridge 会给 `pwsh_safe` 的 base64 命令前缀 `chcp.com 65001`，实测 `chcp` 返回 `Active code page: 65001`，中文输出正确
+- 工具名与提示段名均无重叠
+
 ## [0.2.0] - 2026-11-16
 
 首个版本。基于三个上游项目的纯函数部分重组。
@@ -22,4 +33,4 @@
 - **沙箱策略默认值陷阱**：不显式传 `sandboxPolicy` 时 executor 退回部署默认（workspace-write），与当前会话的 danger-full-access 不一致；现在按会话解析后传入
 
 ### Tests
-- 62 个 `node --test` 用例：规则正反例、幂等性、safe/full 分级、检查器 77 组自检、危险闸、base64 往返、流水线三路径（执行/阻断/拒绝）、版本过滤、盘根路径回归
+- 68 个 `node --test` 用例：规则正反例、幂等性、safe/full 分级、检查器 77 组自检、危险闸、base64 往返、流水线三路径（执行/阻断/拒绝）、版本过滤、盘根路径回归、提示段注册、工作目录解析
