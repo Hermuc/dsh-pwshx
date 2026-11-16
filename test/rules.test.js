@@ -200,3 +200,12 @@ test("GREP keeps redirect and pipeline together", () => {
   const r = run('grep -n "x" f.txt 2>&1 | Select-Object -First 1');
   assert.equal(r.fixed, 'Select-String -Pattern "x" -Path f.txt 2>&1 | Select-Object -First 1');
 });
+test("LS_FLAGS does not treat quoted > as redirect", () => {
+  const r = run('ls -la "a > b"');
+  assert.equal(r.fixed, 'Get-ChildItem "a > b" -Force');
+});
+
+test("LS_FLAGS does not treat quoted 2>&1 as redirect", () => {
+  const r = run('ls -la "a 2>&1 b"');
+  assert.equal(r.fixed, 'Get-ChildItem "a 2>&1 b" -Force');
+});
