@@ -176,3 +176,27 @@ test("TOUCH keeps pipeline intact", () => {
   const r = run("touch x.txt | Out-Null");
   assert.ok(r.fixed.endsWith(" | Out-Null"));
 });
+test("LS_FLAGS keeps 2>&1 redirect", () => {
+  const r = run("ls -la 2>&1");
+  assert.equal(r.fixed, "Get-ChildItem -Force 2>&1");
+});
+
+test("LS_FLAGS keeps stdout redirect", () => {
+  const r = run("ls -la > out.txt");
+  assert.equal(r.fixed, "Get-ChildItem -Force > out.txt");
+});
+
+test("LS_FLAGS keeps && chain", () => {
+  const r = run("ls -la && Write-Output done");
+  assert.equal(r.fixed, "Get-ChildItem -Force && Write-Output done");
+});
+
+test("HEAD_TAIL keeps 2>&1 redirect", () => {
+  const r = run("head -n 3 f.txt 2>&1");
+  assert.equal(r.fixed, "Get-Content f.txt -TotalCount 3 2>&1");
+});
+
+test("GREP keeps redirect and pipeline together", () => {
+  const r = run('grep -n "x" f.txt 2>&1 | Select-Object -First 1');
+  assert.equal(r.fixed, 'Select-String -Pattern "x" -Path f.txt 2>&1 | Select-Object -First 1');
+});

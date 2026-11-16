@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.10] - 2026-11-16
+
+### Fixed（核实 0.2.9 修复时发现的边界 bug）
+- **`splitCommandHead` 把单个 `&` 当命令分隔符**：`ls -la 2>&1` 被切成 `ls -la 2>` + `&1`，生成 `Get-ChildItem 2> -Force&1`（语法错误）。现在只有 `&&` 才切分，单个 `&` 留给重定向解析（调用运算符也不误切）。
+- **重定向被当成路径参数**：`ls -la > out.txt` → `Get-ChildItem > out.txt -Force`；`head -n 3 f.txt 2>&1` → `Get-Content f.txt 2> -TotalCount 3&1`。新增 `splitRedirect()`，`>` / `>>` / `2>` / `2>>` / `*>` / `&>` / `2>&1` 及其后内容统一保留到后缀。
+- **`\"` 与反引号转义未处理**：`ls -la "a\"|b"` 被误切分。`splitCommandHead` 现在跳过 `\` 与反引号转义。
+
+### Tests
+- 115 个 `node --test` 用例（+5：2>&1 / stdout redirect / && 链 / head 2>&1 / grep 重定向+管道）
+
 ## [0.2.9] - 2026-11-16
 
 ### Fixed（真实测试发现的管道破坏，覆盖 5 条规则）
