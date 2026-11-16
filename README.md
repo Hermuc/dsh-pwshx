@@ -121,12 +121,13 @@ node --test          # 50 个用例，含 77 组上游自检
 
 覆盖：规则正反例、幂等性、safe/full 分级、检查器自检、危险命令闸、base64 往返（中文/引号/多行）、流水线三条路径（执行/阻断/拒绝）。
 
-## License
-
-MIT。见 [LICENSE](./LICENSE) 与 [NOTICE](./NOTICE)。
 ## 相对上游修掉的两个真实缺陷
 
 1. **盘根路径被误当续行**：`Remove-Item -Recurse C:\`、`Get-ChildItem D:\` 的行尾 `\` 曾被 `LC_BACKSLASH_TO_BACKTICK` 改写成反引号，导致命令语义变化。现在要求「确实有下一行 + 非盘符根 + 非 UNC 尾」才转换。
 2. **`&&` 被误阻断**：`R11`（PowerShell 5.1 不支持 `&&`）在 pwsh 7 上不成立，但原版检查器一刀切阻断。现在 `lib/core/checkgate.js` 按 `shell` 过滤 R3/R11。
 
 这两条都有回归用例（`test/rules.test.js`、`test/checkgate.test.js`、`test/pipeline.test.js`）。
+
+## License
+
+MIT。见 [LICENSE](./LICENSE) 与 [NOTICE](./NOTICE)。
