@@ -116,3 +116,18 @@ test("LC_BACKSLASH_TO_BACKTICK: real continuation still converts", () => {
   const r = fix("Get-ChildItem \\\n  -Recurse", { ...ENV, level: "safe" });
   assert.equal(r.fixed, "Get-ChildItem `\n  -Recurse");
 });
+test("STRIP_PROMPT: PowerShell comment lines are never treated as prompts", () => {
+  const r = fix("# 只有注释\n# 第二行注释", { platform: "win32", shell: "pwsh", level: "safe" });
+  assert.equal(r.fixed, "# 只有注释\n# 第二行注释");
+  assert.deepEqual(r.fixes, []);
+});
+
+test("STRIP_PROMPT: bash root prompt '#' is still stripped in bash mode", () => {
+  const r = fix("# echo hi\n# echo bye", { platform: "linux", shell: "bash", level: "full" });
+  assert.equal(r.fixed, "echo hi\necho bye");
+});
+
+test("STRIP_PROMPT: PS path prompt still stripped", () => {
+  const r = fix("PS C:\\Users\\An1> Get-ChildItem", { platform: "win32", shell: "pwsh", level: "safe" });
+  assert.equal(r.fixed, "Get-ChildItem");
+});
