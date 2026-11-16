@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.13] - 2026-11-16
+
+### Refactor（导出收敛）
+- `rules.js` 的 `quoteBalanced` 与 `PS_SYNTAX_ON_BASH` 去掉 `export`：两者仅文件内使用（前者 6 处、后者在 `WARN_RULES` 数组），不再污染公共 API。
+- 导出面从 27 收敛到 25（均为规则对象 + `FIX_RULES` / `WARN_RULES`）。
+
+### Tests
+- 127 个用例全过（无行为变化）
+
 ## [0.2.12] - 2026-11-16
 
 ### Refactor（模块化）
