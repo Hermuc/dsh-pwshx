@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.8] - 2026-11-16
+
+### Refactor（模块化，行为零变化）
+- **`pscheck.js` 拆分**：`selftest()` 从 **404 行降到 17 行**；385 条自检用例抽到 `lib/core/pscheck-selftest.js`（纯数据，独立维护）。
+- **`index.js` 拆分**：`apply()` 从 **136 行降到 5 行**；新增 `lib/tool/` 四模块：
+  - `schema.js` —— 工具描述 / 参数 / 输出 schema / 拒绝骨架（纯数据）
+  - `session.js` —— 会话 cwd 与 workdir 解析
+  - `pipeline.js` —— fix → check → gate → base64 → ctx.shell（73 行，可单测）
+  - `register.js` —— systemPrompt 段注册 + 工具注册
+- 104 个 `node --test` 用例全过，行为不变。
+
+### Docs
+- README 修正两处与实际不符的数字：FIX 规则 **20 → 19** 条（`FIX_RULES.length` 实测），自检 **77 → 385** 组（`SELFTEST_CASES.length` 实测）。
+
 ## [0.2.7] - 2026-11-16
 
 ### Fixed（真实清理任务中发现的管道破坏）

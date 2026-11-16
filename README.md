@@ -50,7 +50,7 @@
 
 ## 特性
 
-- **双保险**：自动修复 20 条 + 警告 5 条（来自 powershell-fix，MIT）+ 23 条坑位检查（来自 @chaggle/dsh-powershell-check，MIT，含 77 组自检）
+- **双保险**：自动修复 19 条 + 警告 5 条（来自 powershell-fix，MIT）+ 23 条坑位检查（来自 @chaggle/dsh-powershell-check，MIT，含 385 组自检）
 - **走 DSH 沙箱通道**：和内置 `pwsh` 工具同一执行器，沙箱策略 / ConstrainedLanguage / 权限升级全部生效
 - **与 dsh-win-pwsh7 无冲突**：同一 `ctx.shell`、UTF-8 bridge 的 `chcp 65001` 实测生效、提示段名独立
 - **结果透明**：每次调用回传 `fixes` / `warnings` / `checks`，模型能看见自己被改了什么
