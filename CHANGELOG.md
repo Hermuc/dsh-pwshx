@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.5] - 2026-11-16
+
+### Docs
+- **中文介绍页**：README 按 dsh-tool-pwsh-safe 的介绍风格重写（「肘击」开篇、对比表、特性、安装、使用、配置），并补充本插件独有的自动修复、坑位检查、here-string/注释保护、workdir 校验、与 dsh-win-pwsh7 协作矩阵、7 条上游缺陷修复记录。
+- **package.json description 改为中文**：`DeepSeek Harness 的单一 PowerShell 执行路径：执行前自动修复 Bash 惯性语法，再以 base64 编码通过官方 ctx.shell 通道执行（转义免疫，兼容 dsh-win-pwsh7）。`
+
 ## [0.2.4] - 2026-11-16
 
 ### Fixed（第 3 轮 bug 测试发现）
