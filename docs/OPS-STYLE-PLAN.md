@@ -179,3 +179,29 @@ const policy = approved === undefined ? standing : { ...standing, mode: approved
 
 - **重启 dsh web**，验证：工具列表只有 `pwsh_safe` + `pwsh7_status` + `pwsh7_install`，`pwsh` 不再出现
 - 重启后实测 `pwsh_safe`（普通执行 + `run_in_background` + `sandbox_permissions`）
+### 第二次重启后修复（2026-11-17 14:49-14:52）
+
+| 问题 | 根因 | 修复 |
+|---|---|---|
+| `dsh-pwshx` 加载失败（`pwsh_safe` 消失） | `OUTPUT_SCHEMA.oneOf[1]` 用了属性级 `required: true`，严格 JSON Schema 不支持 | 改为数组级 `required: ["kind", "jobId", "cwd"]`；新增 `test/schema.test.js` 用 `assertSupportedJsonSchema` 校验 |
+| `pwsh` 未禁用 | `deriveDeepPtc` 会移除 `tool-pwsh` 行并替换成 `dsh-deep-ptc-mode/terminal`（内部加载 `@deepseek-ai/dsh-tool-pwsh`），改 `preset.json` 无效 | 在 `model.mjs` 的 `deriveDeepPtc` 生成的 `terminal` 行加 `disabled: true` |
+
+### 最终验证（重启后实测）
+
+| 项目 | 结果 |
+|---|---|
+| `tools.pwsh` | ❌ **不存在**（`tools.pwsh is not a function`）——官方 `pwsh` 已隐藏 |
+| `pwsh_safe` | ✅ `ops-ok` / `7.6.8` / `codePage=65001` |
+| `pwsh7_status` | ✅ 「pwsh_safe currently runs on PowerShell 7.6.8」 |
+| `pwsh7_install` | ✅ 「already in place」 |
+| auto-fix | ✅ `LS_FLAGS` + `fixedScript: "Get-ChildItem -Force | Select-Object -First 2"` |
+| 后台任务 | ✅ `{kind:'background', jobId:'pwsh-3404f6034ddd4290', cwd:'D:\\PortableApps'}`；`job_output` → `bg-ok` / `completed` |
+| 环境声明 | ✅ 「Use the pwsh_safe tool for all PowerShell work — ... auto-fix, pitfall checks, a danger gate, base64 transport, background jobs (run_in_background) and sandbox escalation」 |
+| `sandbox_permissions` 参数 | ✅ 已广告（SDK 声明包含 `sandbox_permissions` + `justification`） |
+
+### 最终状态
+
+- **AI 看到的工具**：`pwsh_safe`（执行）+ `pwsh7_status`（诊断）+ `pwsh7_install`（安装）
+- **`pwsh` 已从工具列表消失**（`terminal` 行 `disabled: true`）
+- **测试**：187 / 187 通过
+- **Git**：`66f8929`（schema 修复）已推送
