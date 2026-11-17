@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "dsh-pwshx",
+    "description": "Elbow-proof PowerShell plus an honest runtime: pwsh_safe ships your script exactly as written, and the gate refuses to let a 5.1 fallback pretend it is PowerShell 7."
+  }
+}

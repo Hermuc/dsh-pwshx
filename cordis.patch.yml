@@ -1,9 +1,9 @@
-# dsh-tool-pwsh-safe-plus — bundle patch
-# Registers the single-path pwsh tool (auto-fix + base64 execution) on ctx.tools.
+# dsh-pwshx — bundle patch
+# 注册单一 PowerShell 执行路径 + PowerShell 7 运行时保障（检测 / gate / UTF-8 代码页）。
 
 - insert:
-    - id: tool-pwsh-safe-plus
-      name: 'dsh-tool-pwsh-safe-plus'
+    - id: pwshx
+      name: 'dsh-pwshx'
       config:
         fixLevel: safe
         checkMode: block

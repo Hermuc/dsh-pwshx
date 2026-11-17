@@ -191,7 +191,7 @@ test("registers the systemPrompt section through optional injection", () => {
   };
   apply(ctx, {});
   assert.ok(section, "section was not registered");
-  assert.equal(section.name, "tool:pwsh-safe-plus");
+  assert.equal(section.name, "tool:pwshx");
   assert.equal(section.order, 42);
   assert.match(section.text, /pwsh_safe/);
 });

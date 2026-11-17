@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { executionGate } from "../lib/core/gate.js";
+import { executionGate } from "../lib/core/danger-gate.js";
 
 test("blocks Remove-Item -Recurse on a drive root", () => {
   assert.ok(executionGate("Remove-Item -Recurse C:\\"));
