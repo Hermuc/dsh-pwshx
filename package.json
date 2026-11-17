@@ -40,28 +40,12 @@
     "@deepseek-ai/cordis": ">=4.0.0",
     "@deepseek-ai/dsh-pwsh-local": ">=0.2.1",
     "@deepseek-ai/dsh-tools": ">=0.2.1",
-    "@deepseek-ai/schemastery": ">=3.18.0"
+    "@deepseek-ai/schemastery": ">=3.18.0",
+    "@deepseek-ai/dsh-sandbox": ">=0.2.1"
   },
   "engines": {
     "dsh": ">=0.2.1-rc.3 <0.3.0-0",
     "node": ">=18.0.0"
   },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/Hermuc/dsh-pwshx.git"
-  },
-  "scripts": {
-    "test": "node --test"
-  },
-  "keywords": [
-    "dsh",
-    "deepseek-harness",
-    "plugin",
-    "powershell",
-    "pwsh",
-    "tool",
-    "auto-fix",
-    "runtime-gate"
-  ]
+  "license": "MIT"
 }
