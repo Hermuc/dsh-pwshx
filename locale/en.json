@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "dsh-pwshx",
-    "description": "Elbow-proof PowerShell plus an honest runtime: pwsh_safe ships your script exactly as written, and the gate refuses to let a 5.1 fallback pretend it is PowerShell 7."
+    "description": "Elbow-proof PowerShell with an honest runtime: pwsh_safe is the single execution entry (auto-fix, pitfall checks, danger gate, base64, background jobs, sandbox escalation), and the official pwsh tool is hidden."
   }
 }

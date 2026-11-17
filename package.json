@@ -1,7 +1,7 @@
 {
   "name": "dsh-pwshx",
   "version": "0.1.0",
-  "description": "DeepSeek Harness 的单一 PowerShell 执行路径：执行前自动修复 Bash 惯性语法、base64 编码执行，并内置 PowerShell 7 运行时检测、gate 与 UTF-8 代码页保障。",
+  "description": "DeepSeek Harness 的单一 PowerShell 执行入口：pwsh_safe 提供 auto-fix、坑位检查、danger-gate、base64、前台/后台任务与沙箱升级；官方 pwsh 可隐藏，运行时检测/gate/UTF-8 代码页保障内置。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {

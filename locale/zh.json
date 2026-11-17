@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "dsh-pwshx",
-    "description": "一个插件治住 PowerShell 的两件破事：转义地狱，和「以为在用 7 其实掉回 5.1」。pwsh_safe 负责原样送脚本，gate 负责确认对面真是 PowerShell 7。"
+    "description": "一个插件治住 PowerShell 的破事：转义地狱、以为在用 7 其实掉回 5.1、长命令不能后台、沙箱拒绝没法升级。pwsh_safe 是唯一执行入口，官方 pwsh 已被隐藏。"
   }
 }
