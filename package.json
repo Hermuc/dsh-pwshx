@@ -13,6 +13,7 @@
     "./package.json": "./package.json"
   },
   "files": [
+    "icon.svg",
     "lib",
     "client.js",
     "locale",
@@ -20,7 +21,8 @@
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
-    "NOTICE"
+    "NOTICE",
+    "docs"
   ],
   "dsh": {
     "bundle": {
@@ -47,5 +49,6 @@
     "dsh": ">=0.2.1-rc.3 <0.3.0-0",
     "node": ">=18.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "icon": "./icon.svg"
 }
