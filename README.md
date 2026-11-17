@@ -132,7 +132,7 @@ lib/
 | `shell` | `pwsh` | `auto` / `pwsh` / `powershell51` |
 | `timeoutMs` | `120000` | 单次执行超时（毫秒） |
 | `maxEncodedChars` | `24000` | base64 编码后的最大字符数 |
-| `overridePath` | `""` | 指定 pwsh.exe 路径（优先于自动探测） |
+| `overridePath` | `""` | **可选**：指定 pwsh.exe 路径（优先于自动探测）。**留空即自动探测** `%ProgramFiles%\PowerShell\7`、PATH、Microsoft Store 别名、Scoop、PowerShell 7 preview |
 | `utf8Console` | `true` | 是否启用 UTF-8 代码页 bridge |
 
 ## `dsh-ops` 式：隐藏官方 `pwsh`
