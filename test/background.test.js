@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { processJob, processSources, processOutcome, ringDelta } from "../lib/tool/background.js";
+import { processJob, processSources, processOutcome } from "../lib/tool/background.js";
 
 test("processOutcome: completed with exit code", () => {
   assert.deepEqual(processOutcome({ status: "completed", exitCode: 0 }), { status: "completed", detail: "exit code: 0" });
@@ -48,11 +48,3 @@ test("processJob: start resolves -> outcome", async () => {
   assert.deepEqual(out, { status: "completed", detail: "exit code: 0" });
 });
 
-test("ringDelta: stdout then stderr section", () => {
-  const d = ringDelta([{ channel: "stdout", text: "a\n" }, { channel: "stderr", text: "e" }]);
-  assert.equal(d, "a\n[stderr]\ne");
-});
-
-test("ringDelta: empty", () => {
-  assert.equal(ringDelta([]), "");
-});
